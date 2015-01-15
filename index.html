@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>TypeScript HTML App</title>
+        <link rel="stylesheet" href="app.css" type="text/css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js" data-require="angular.js@1.3.6" data-semver="1.3.6"></script>
+        <script src="angular-cdc.js"></script>
+        <script src="angular-cdc-azuremobileservices.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/mobileservices/MobileServices.Web-1.1.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.0.3.min.js" data-require="jquery@*" data-semver="2.0.3"></script>
+        
+
+    </head>
+    <body ng-app="demoApp" ng-controller="demoController">
+        <div class="items" ng-repeat="entry in TodoItem">
+            {{entry.name}}
+            {{entry.data}}
+        </div>
+        <script>
+        var app = angular.module("demoApp", ["AngularCDC", "AngularMobileServices"]);
+        app.controller("demoController", ["$scope", "angularCDCService", "angularCDCAzureMobileService",
+
+            function ($scope, angularCDCService, angularCDCAzureMobileService) {
+
+                (function () {
+                    angularCDCAzureMobileService.addSource("https://a-rest-ed-development.azure-mobile.net/", "WLmrrqVoxUWynzPGaAuDKUgfJDcwnK26", ["TodoItem"]);
+                    angularCDCService.addSource(angularCDCAzureMobileService);
+                    angularCDCService.connect(function (results) { }, $scope);
+                    angularCDCService.readAll();
+                    $scope.watch($scope.apply());
+                })();
+
+            }
+
+        ]);
+        </script>
+
+    </body>
+    
+
+</html>
